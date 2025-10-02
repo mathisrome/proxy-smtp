@@ -1,0 +1,23 @@
+services:
+  exim:
+    container_name: exim
+    hostname: exim
+    build:
+      context: .
+    ports:
+      - "25:25"
+      - "465:465"
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    hostname: mailpit
+    ports:
+      - "8025:8025"
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    container_name: mailcatcher
+    hostname: mailcatcher
+    ports:
+      - "8080:1080"
