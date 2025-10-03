@@ -990,12 +990,7 @@ acl_check_data:
 ######################################################################
 
 begin routers
-send_per_app:
-  driver = manualroute
-  domains = ! +local_domains
-  condition = ${if def:h_X-App-Id:{}}
-  transport = ${lookup{$h_X-App-Id:}lsearch{/etc/exim4/transport_map}{$value}{smtp_default}}
-  route_list = * ${lookup{$h_X-App-Id:}lsearch{/etc/exim4/relay_map}{$value}{127.0.0.1::1025}}
+
 #####################################################
 ### end router/00_exim4-config_header
 #####################################################
@@ -1452,26 +1447,6 @@ mail4root:
 # handles an address.
 
 begin transports
-
-smtp_projets:
-  driver = smtp
-  hosts_require_auth = *
-  smtp_auth = login
-  smtp_auth_user = user@domain.com
-  smtp_auth_password = motdepasse
-
-smtp_saisie:
-  driver = smtp
-  hosts_require_auth = *
-  hosts_require_auth = *
-  smtp_auth = login
-  smtp_auth_user = user@domain.com
-  smtp_auth_password = motdepasse
-
-smtp_default:
-  driver = smtp
-  hosts = 127.0.0.1
-  port = 1025
 
 #####################################################
 ### end transport/00_exim4-config_header
@@ -1943,15 +1918,16 @@ begin authenticators
 # password are $auth1 and $auth2. Apart from that you can use the same
 # server_condition setting for both authenticators.
 
-# login_server:
-#   driver = plaintext
-#   public_name = LOGIN
-#   server_prompts = "Username:: : Password::"
-#   server_condition = "${if crypteq{$auth2}{${extract{1}{:}{${lookup{$auth1}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}{1}{0}}"
-#   server_set_id = $auth1
-#   .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
-#   server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
-#   .endif
+login_server:
+  driver = plaintext
+  public_name = LOGIN
+  auth_advertise_hosts = *
+  server_prompts = "Username:: : Password::"
+  server_condition = "${if crypteq{$auth2}{${extract{1}{:}{${lookup{$auth1}lsearch{CONFDIR/passwd}{$value}{*:*}}}}}{1}{0}}"
+  server_set_id = $auth1
+  .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
+  server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
+  .endif
 #
 # cram_md5_server:
 #   driver = cram_md5
@@ -2185,8 +2161,3 @@ login:
 #####################################################
 ### end auth/30_exim4-config_examples
 #####################################################
-
-
-
-
-

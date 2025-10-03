@@ -1,0 +1,5 @@
+remote_smtp_smarthost:
+  debug_print = "T: remote_smtp_smarthost for $local_part@$domain"
+  driver = smtp
+  multi_domain = true
+  hosts_try = mailpit::1025 : mailcatcher::1025
