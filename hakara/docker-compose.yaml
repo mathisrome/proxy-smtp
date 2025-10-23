@@ -1,0 +1,35 @@
+services:
+  smtp-proxy:
+    container_name: haraka
+    hostname: haraka
+    build:
+      context: .
+    ports:
+      - "25:25"
+      - "465:465"
+    volumes:
+      - ./app:/haraka
+    command:
+      - tail
+      - -f
+      - /dev/null
+    networks:
+      - smtp-proxy
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    hostname: mailpit
+    ports:
+      - "8025:8025"
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    container_name: mailcatcher
+    hostname: mailcatcher
+    ports:
+      - "8080:1080"
+
+networks:
+  smtp-proxy:
+    external: true
