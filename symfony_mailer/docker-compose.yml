@@ -5,9 +5,5 @@ services:
     volumes:
       - ./app:/app
     tty: true
-    networks:
-      - smtp-proxy
-
-networks:
-  smtp-proxy:
-    external: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

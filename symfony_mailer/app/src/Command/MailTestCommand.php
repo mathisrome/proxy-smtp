@@ -30,8 +30,8 @@ class MailTestCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $email = (new Email())
-            ->from('hello@example.com')
-            ->to('you@example.com')
+            ->from('no-reply@mathisrome.fr')
+            ->to('mrome@webnet.fr')
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
